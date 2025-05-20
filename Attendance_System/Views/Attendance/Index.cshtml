@@ -1,0 +1,44 @@
+﻿@model List<Attendance_System.Models.Attendance>
+@{
+    ViewData["Title"] = "Attendance List";
+}
+
+<h2>Attendance List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var attendance in Model)
+        {
+            <tr>
+                <td>@attendance.Employee?.Name</td>
+                <td>@attendance.CheckIn.ToString("g")</td>
+                <td>
+                    @(attendance.CheckOut.HasValue
+                        ? attendance.CheckOut.Value.ToString("g")
+                        : "--")
+                </td>
+                <td>
+                    @if (!attendance.CheckOut.HasValue)
+                    {
+                        <form asp-action="CheckOut" method="post">
+                            <input type="hidden" name="attendanceId" value="@attendance.Id" />
+                            <button type="submit" class="btn btn-danger">Check Out</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Completed</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
